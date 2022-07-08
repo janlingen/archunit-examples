@@ -1,4 +1,4 @@
-package com.yourname.yourprojectname.adapters.web;
+package com.yourname.yourprojectname.presentationlayer.controller;
 
 /**
  * @author janlingen

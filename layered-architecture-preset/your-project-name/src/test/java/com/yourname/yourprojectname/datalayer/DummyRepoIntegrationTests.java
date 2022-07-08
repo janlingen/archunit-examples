@@ -1,4 +1,4 @@
-package com.yourname.yourprojectname.adapters.database.implementation;
+package com.yourname.yourprojectname.datalayer;
 
 /**
  * @author janlingen

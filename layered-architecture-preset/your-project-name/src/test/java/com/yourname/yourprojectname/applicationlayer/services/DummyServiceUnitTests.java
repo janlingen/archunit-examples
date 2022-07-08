@@ -1,4 +1,4 @@
-package com.yourname.yourprojectname.application.services;
+package com.yourname.yourprojectname.applicationlayer.services;
 
 /**
  * @author janlingen

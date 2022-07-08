@@ -1,4 +1,4 @@
-package com.yourname.yourprojectname.domain.entities;
+package com.yourname.yourprojectname.applicationlayer;
 
 /**
  * @author janlingen
