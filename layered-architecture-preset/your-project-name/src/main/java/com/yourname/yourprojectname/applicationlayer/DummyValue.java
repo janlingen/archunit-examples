@@ -1,4 +1,4 @@
-package com.yourname.yourprojectname.domain.values;
+package com.yourname.yourprojectname.applicationlayer;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.yourname.yourprojectname.adapters.database.datatransfer.values;
+package com.yourname.yourprojectname.datalayer.datatransfer.values;
 
 import javax.persistence.Embeddable;
 import lombok.Data;

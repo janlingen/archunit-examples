@@ -1,7 +1,6 @@
-package com.yourname.yourprojectname.adapters.database.datatransfer.entities;
+package com.yourname.yourprojectname.datalayer.datatransfer.entities;
 
-import com.yourname.yourprojectname.adapters.database.datatransfer.values.DummyValueDto;
-import javax.persistence.Embeddable;
+import com.yourname.yourprojectname.datalayer.datatransfer.values.DummyValueDto;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;

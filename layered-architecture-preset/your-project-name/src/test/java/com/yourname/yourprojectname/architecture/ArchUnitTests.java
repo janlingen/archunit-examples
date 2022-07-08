@@ -4,7 +4,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.importer.ImportOption;
@@ -56,12 +55,12 @@ public class ArchUnitTests {
 
   @ArchTest
   static final ArchRule layered = layeredArchitecture()
-      .layer("web").definedBy("..controller..")
-      .layer("services").definedBy("..services..")
-      .layer("database").definedBy("..database..")
-      .whereLayer("web").mayNotBeAccessedByAnyLayer()
-      .whereLayer("services").mayOnlyBeAccessedByLayers("web")
-      .whereLayer("database").mayOnlyBeAccessedByLayers("services");
+      .layer("database").definedBy("..datalayer..")
+      .layer("application").definedBy("..applicationlayer..")
+      .layer("presentation").definedBy("..presentationlayer..")
+      .whereLayer("presentation").mayNotBeAccessedByAnyLayer()
+      .whereLayer("application").mayOnlyBeAccessedByLayers("presentation")
+      .whereLayer("database").mayOnlyBeAccessedByLayers("application");
 
   // Custom rules
   // ----------------------------------------------------------------------------------------------
@@ -108,7 +107,7 @@ public class ArchUnitTests {
           .and()
           .areNotInterfaces()
           .and()
-          .resideInAPackage("..application.services..")
+          .resideInAPackage("..applicationlayer.services..")
           .should()
           .beMetaAnnotatedWith(Service.class)
           .as("Services need to be annotated with @Service to be loaded into context");
@@ -117,7 +116,7 @@ public class ArchUnitTests {
   @ArchTest
   static final ArchRule serviceClassSuffix =
       classes()
-          .that().resideInAPackage("..application.services..")
+          .that().resideInAPackage("..applicationlayer.services..")
           .and().areAnnotatedWith(Service.class)
           .should().haveSimpleNameEndingWith("Service")
           .as("The end of the name of a service class should be Service");
@@ -132,7 +131,7 @@ public class ArchUnitTests {
           .and()
           .areNotInterfaces()
           .and()
-          .resideInAPackage("..adapters.web.controller..")
+          .resideInAPackage("..presentationlayer.controller..")
           .should()
           .beMetaAnnotatedWith(Controller.class);
 
@@ -140,7 +139,7 @@ public class ArchUnitTests {
   @ArchTest
   static final ArchRule controllerClassSuffix =
       classes()
-          .that().resideInAPackage("..adapters.web.controller..")
+          .that().resideInAPackage("..presentationlayer.controller..")
           .and().areAnnotatedWith(Controller.class)
           .should().haveSimpleNameEndingWith("Controller")
           .as("The end of the name of a controller class should be Controller");
@@ -167,29 +166,4 @@ public class ArchUnitTests {
           .and().areAnnotatedWith(Configuration.class)
           .should().haveSimpleNameEndingWith("Configuration")
           .as("The end of the name of a configuration class should be Configuration");
-
-  // Classes that are top level classes and reside in package application.repositories
-  // should be interfaces
-  @ArchTest
-  static final ArchRule shouldBeInterfaces =
-      classes()
-          .that()
-          .areTopLevelClasses()
-          .and()
-          .resideInAPackage("..application.repositories..")
-          .should()
-          .beInterfaces();
-
-  // Classes that are top level classes and reside in package database.implementation
-  // should implement interfaces residing in package application.repositories
-  @ArchTest
-  static final ArchRule implementingInterfaces =
-      classes()
-          .that()
-          .areTopLevelClasses()
-          .and()
-          .resideInAPackage("..adapters.database.implementation")
-          .should()
-          .implement(JavaClass.Predicates.resideInAPackage("..application.repositories.."));
-
 }
